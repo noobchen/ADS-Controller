@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="area">
+    <resultMap id="areaMap" type="com.ads.cm.repository.area.areaBean.Area">
+        <result property="province_id" column="PROVINCE_ID"/>
+        <result property="provider_id" column="PROVIDER_ID"/>
+        <result property="city_id" column="CITY_ID"/>
+    </resultMap>
+
+    <resultMap id="areaInfoMap" type="com.ads.cm.repository.area.areaBean.Area">
+        <result property="province_id" column="PROVINCE_ID"/>
+        <result property="provider_id" column="PROVIDER_ID"/>
+        <result property="city_id" column="CITY_ID"/>
+        <result property="pay_order_id" column="PAY_ORDER_ID"/>
+    </resultMap>
+
+
+    <select id="getAllIp" resultType="com.ads.cm.repository.area.areaBean.IP">
+        SELECT
+            ip_start_num,
+            ip_end_num,
+            province_id,
+            provider_id,
+            city_id
+         FROM
+            tbl_ip_info
+         ORDER BY
+            ip_start_num ASC
+    </select>
+
+
+    <select id="getAreaByPhone" parameterType="java.lang.String" resultMap="areaMap">
+            SELECT
+                province_id,
+                provider_id,
+                city_id
+            FROM
+                tbl_phone_info
+            WHERE
+                phone_prefix = #{phone_prefix}
+    </select>
+
+
+    <select id="getAreaBySmsp" parameterType="java.lang.String" resultMap="areaMap">
+            SELECT
+                province_id,
+                provider_id,
+                city_id
+            FROM
+                tbl_smsp_info
+            WHERE
+                smsp = #{smsp}
+    </select>
+
+    <select id="getAreaByIp" parameterType="java.lang.Long" resultMap="areaMap">
+        <![CDATA[
+
+
+
+
+
+
+
+
+            SELECT
+                province_id,
+                provider_id,
+                city_id
+            FROM
+                tbl_ip_info
+            WHERE
+                ip_start_num <= #{ip}
+            AND
+                ip_end_num >= #{ip}
+
+
+
+
+
+
+
+
+        ]]>
+    </select>
+
+
+    <insert id="savePhoneAttribute" parameterType="com.ads.cm.repository.area.areaBean.Area">
+         INSERT INTO tbl_register_area_info(
+                    imsi,
+                    provider_id,
+                    province_id,
+                    city_id,
+                    create_time
+
+                    )VALUES(
+                    #{imsi,jdbcType=VARCHAR},
+                    #{provider_id,jdbcType=VARCHAR},
+                    #{province_id,jdbcType=VARCHAR},
+                    #{city_id,jdbcType=VARCHAR},
+                    NOW()
+                    )
+    </insert>
+
+
+    <select id="getPhoneAttribute" parameterType="java.lang.String" resultMap="areaMap">
+         SELECT
+                province_id,
+                provider_id,
+                city_id
+            FROM
+                tbl_register_area_info
+            WHERE
+                imsi = #{imsi}
+                LIMIT
+                1
+    </select>
+
+
+</mapper>

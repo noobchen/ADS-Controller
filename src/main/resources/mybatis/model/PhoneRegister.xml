@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="phoneRegister">
+
+
+    <select id="cheakIsExit" parameterType="com.ads.cm.model.RegisterModel" resultType="java.lang.Long">
+            SELECT
+                id
+            FROM
+                tbl_register_info
+            WHERE
+                app_key = #{app_key}
+                AND
+                imei = #{imei}
+                AND
+                sdk_channel = #{channelName}
+            LIMIT
+                1
+    </select>
+
+
+
+
+
+    <insert id="savePhoneDetial" parameterType="com.ads.cm.model.RegisterModel">
+        INSERT INTO tbl_register_user_info(
+        phone_num,
+        imei,
+        phone_factory,
+        phone_version,
+        os_version,
+        create_time,
+        root_state,
+        os_int,
+        mac
+
+        )VALUES(
+        #{phoneNum,jdbcType=VARCHAR},
+        #{imei,jdbcType=VARCHAR},
+        #{phone_factory,jdbcType=VARCHAR},
+        #{phone_version,jdbcType=VARCHAR},
+        #{os_version,jdbcType=VARCHAR},
+        NOW() ,
+        #{isRoot,jdbcType=INTEGER},
+        #{os_int,jdbcType=INTEGER},
+        #{mac,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="savePhoneInfo" parameterType="com.ads.cm.model.RegisterModel">
+        INSERT INTO tbl_register_info(
+        sdk_version,
+        app_key,
+        sdk_channel,
+        imei,
+        imsi,
+        create_time
+        )VALUES(
+        #{sdk_version,jdbcType=VARCHAR},
+        #{app_key,jdbcType=VARCHAR},
+        #{channelName,jdbcType=VARCHAR},
+        #{imei,jdbcType=VARCHAR},
+        #{imsi,jdbcType=VARCHAR},
+        NOW()
+        )
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+
+            SELECT LAST_INSERT_ID() AS id
+
+        </selectKey>
+
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>\log\logFile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>\log\logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="REGISTER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>\log\register\register.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>\log\register\register.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="GETASK" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>\log\getask\getask.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>\log\getask\getask.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="REPORTASK" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>\log\reportask\reportask.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>\log\reportask\reportask.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="UPDATETASK" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>\log\updatetask\updatetask.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>\log\updatetask\updatetask.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <logger name="java.sql" level="DEBUG" additivity="true"/>
+    <logger name="org.mybatis" level="DEBUG" additivity="true"/>
+
+    <logger name="register" level="DEBUG" additivity="false">
+        <appender-ref ref="REGISTER"/>
+    </logger>
+    <logger name="getask" level="DEBUG" additivity="false">
+        <appender-ref ref="GETASK"/>
+    </logger>
+    <logger name="reportask" level="DEBUG" additivity="false">
+        <appender-ref ref="REPORTASK"/>
+    </logger>
+    <logger name="updatetask" level="DEBUG" additivity="false">
+        <appender-ref ref="UPDATETASK"/>
+    </logger>
+
+
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="loadManagerDao" class="com.ads.cm.repository.load.LoadManagerDaoImpl">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="phoneRegisterDao" class="com.ads.cm.repository.register.PhoneRegisterDaoImpl">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="getTasksDao" class="com.ads.cm.repository.getTask.GetTasksDaoImpl">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="areaDao" class="com.ads.cm.repository.area.AreaDaoImpl">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+</beans>

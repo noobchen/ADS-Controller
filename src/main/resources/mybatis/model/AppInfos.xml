@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="appInfos">
+    <resultMap id="appInfoMap" type="com.ads.cm.repository.getTask.taskBean.AppInfos">
+        <result property="id" column="id"/>
+        <result property="packageName" column="package_name"/>
+        <result property="appName" column="app_name"/>
+        <result property="appVersion" column="app_version"/>
+        <result property="appKey" column="app_key"/>
+        <result property="appType" column="app_type"/>
+        <result property="remark" column="remark"/>
+        <result property="pushStatus" column="push_state"/>
+        <result property="pushTimes" column="push_times"/>
+        <result property="bannerStatus" column="banner_state"/>
+        <result property="bannerTimes" column="banner_times"/>
+        <result property="iconStatus" column="icon_state"/>
+        <result property="iconTimes" column="icon_times"/>
+        <result property="pushInterval" column="push_interval"/>
+        <result property="bannerInterval" column="banner_interval"/>
+        <result property="iconInterval" column="icon_interval"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+
+    </resultMap>
+
+    <select id="cheakAppChannelIsExits" parameterType="com.ads.cm.model.RegisterModel" resultType="java.lang.Long">
+        SELECT
+        id
+        FROM
+        tbl_app_channel_info
+        WHERE
+        app_id = (select id from tbl_app_info where app_key = #{app_key})
+        AND
+        channel_id = #{channelName}
+
+        LIMIT
+        1
+    </select>
+
+    <insert id="addAppChannelInfo" parameterType="com.ads.cm.model.RegisterModel">
+        INSERT INTO tbl_app_channel_info(
+        app_id,
+        channel_id,
+        create_time
+        )VALUES(
+         (select id from tbl_app_info where app_key = #{app_key}),
+        #{channelName,jdbcType=VARCHAR},
+        NOW()
+        )
+
+
+    </insert>
+
+
+    <select id="getAppInfo" parameterType="java.lang.String" resultMap="appInfoMap">
+       SELECT
+                push_state,
+                banner_state,
+                icon_state,
+                push_times,
+                banner_times,
+                icon_times,
+                push_interval,
+                banner_interval,
+                icon_interval
+
+            FROM
+                tbl_app_info
+            WHERE
+                app_key = #{appKey}
+
+            LIMIT
+                1
+    </select>
+
+    <select id="getAppInfoV2" parameterType="java.util.HashMap" resultMap="appInfoMap">
+       SELECT
+                push_state,
+                banner_state,
+                icon_state,
+                push_times,
+                banner_times,
+                icon_times,
+                push_interval,
+                banner_interval,
+                icon_interval
+
+            FROM
+                tbl_app_channel_info
+            WHERE
+                app_id = ( select id from tbl_app_info where app_key = #{key} )
+                AND
+                channel_id = #{channelId}
+
+            LIMIT
+                1
+    </select>
+
+
+</mapper>

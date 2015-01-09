@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adsTasks">
+    <resultMap id="taskInfosMap" type="com.ads.cm.repository.getTask.taskBean.TaskInfos">
+        <result property="id" column="id"/>
+        <result property="weight" column="weight"/>
+        <result property="countType" column="count_type"/>
+        <result property="type" column="type"/>
+        <result property="times" column="times"/>
+        <result property="prefer_time" column="perfer_time"/>
+        <result property="prefer_provider" column="perfer_provider"/>
+        <result property="prefer_province" column="perfer_province"/>
+        <result property="prefer_city" column="perfer_city"/>
+
+
+    </resultMap>
+
+    <resultMap id="adsTasksMap" type="com.ads.cm.repository.getTask.taskBean.AdsTask">
+        <result property="actionType" column="action_type"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="describe" column="describe_"/>
+        <result property="packgeName" column="packge_name"/>
+        <result property="isMustDown" column="is_mustDown"/>
+        <result property="isNoclear" column="is_noclear"/>
+        <result property="adsChangeTime" column="change_time"/>
+        <result property="downLoadUrl" column="download_url"/>
+        <result property="notiImageUrl" column="nti_image_url"/>
+        <result property="preDownload" column="pre_download"/>
+    </resultMap>
+
+
+    <select id="getAllTasks" parameterType="java.lang.Integer" resultMap="taskInfosMap">
+            SELECT
+                id,
+                weight,
+                count_type,
+                times,
+                perfer_time,
+                perfer_provider,
+                perfer_province,
+                perfer_city
+
+
+            FROM
+                tbl_task_info
+            WHERE
+                type =  #{type}
+            AND
+                status = 1
+
+
+    </select>
+
+    <select id="getTaskInfoByTaskId" parameterType="java.lang.Integer" resultMap="taskInfosMap">
+            SELECT
+              type,
+              count_type,
+              times
+            FROM
+                tbl_task_info
+            WHERE
+                id =  #{taskId}
+
+
+
+    </select>
+
+    <select id="getTaskDetial" parameterType="java.lang.Integer" resultMap="adsTasksMap">
+            SELECT
+                action_type,
+                image_url,
+                describe_,
+                packge_name,
+                is_mustDown,
+                is_noclear,
+                change_time,
+                download_url,
+                nti_image_url,
+                pre_download
+            FROM
+                tbl_task_detial
+            WHERE
+                task_id =  #{taskId}
+
+
+
+    </select>
+
+    <update id="updateTaskStatus" parameterType="java.lang.Integer">
+        UPDATE
+            tbl_task_info
+          SET
+            status = 2
+         WHERE
+            id = #{id}
+    </update>
+
+    <update id="updateInstallStatus" parameterType="java.lang.Integer">
+        UPDATE
+            tbl_task_report_info
+          SET
+            installState = 1
+         WHERE
+            id = #{id}
+    </update>
+
+    <insert id="addTaskReport" parameterType="com.ads.cm.model.ReportTaskStatusModel">
+        INSERT INTO tbl_task_report_info(
+        phoneIndex,
+        taskId,
+        getTaskState,
+        create_time
+
+        )VALUES(
+        #{phoneIndex,jdbcType=INTEGER},
+        #{taskId,jdbcType=INTEGER},
+        #{getTaskState,jdbcType=INTEGER},
+        NOW()
+        )
+        <selectKey keyProperty="id" resultType="java.lang.Integer">
+
+            SELECT LAST_INSERT_ID() AS id
+
+        </selectKey>
+
+    </insert>
+
+
+    <update id="addMoreTaskReport" parameterType="com.ads.cm.model.ReportTaskStatusModel">
+        UPDATE
+        tbl_task_report_info
+        SET
+        getTaskState = #{getTaskState,jdbcType=INTEGER},
+        showState = #{showState,jdbcType=INTEGER},
+        downState = #{downState,jdbcType=INTEGER},
+        installState = #{installState,jdbcType=INTEGER},
+        errorCode = #{errorCode,jdbcType=VARCHAR}
+        WHERE
+        id = #{reportTblId}
+    </update>
+
+
+    <update id="updateTaskReport" parameterType="java.lang.Integer">
+        UPDATE
+            tbl_task_report_info
+          SET
+            installState = 1
+         WHERE
+            id = #{id}
+    </update>
+
+</mapper>

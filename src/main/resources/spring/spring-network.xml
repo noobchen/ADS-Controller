@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <!-- network config -->
+    <bean class="com.ads.cm.network.http.HttpServer" init-method="start">
+        <property name="port" value="${http.server.port}"/>
+        <property name="pipelineFactory" ref="httpServerPipelineFactory"/>
+    </bean>
+
+    <bean id="httpServerPipelineFactory" class="com.ads.cm.network.http.HttpServerPipelineFactory">
+        <property name="channelUpstreamHandler" ref="httpRequestHandler"/>
+    </bean>
+
+    <bean id="httpRequestHandler" class="com.ads.cm.network.http.HttpRequestHandler">
+        <property name="urlMaps">
+            <map>
+
+                <entry key="/register">
+                    <ref bean="registerFactory"/>
+                </entry>
+
+                <entry key="/getTasks">
+                    <ref bean="getTasksFactory"/>
+                </entry>
+
+                <entry key="/report">
+                    <ref bean="reportTaskStatusFactory"/>
+                </entry>
+
+                <entry key="/update">
+                    <ref bean="updateTaskStatusJsonDecoderFactory"/>
+                </entry>
+
+                <entry key="/load">
+                    <ref bean="loadManagerJsonDecoderFactory"/>
+                </entry>
+
+            </map>
+        </property>
+    </bean>
+
+    <bean id="registerFactory" class="com.ads.cm.network.protocol.JsonCodecFactory">
+        <constructor-arg index="0" ref="registerJsonDecoder"/>
+        <constructor-arg index="1" ref="jsonEncoder"/>
+    </bean>
+    <bean id="registerJsonDecoder" class="com.ads.cm.network.protocol.decoder.json.JsonDecoder">
+        <property name="className" value="com.ads.cm.model.RegisterModel"/>
+        <property name="encrypt" value="${content.encrypt}"/>
+    </bean>
+
+
+    <bean id="getTasksFactory" class="com.ads.cm.network.protocol.JsonCodecFactory">
+        <constructor-arg index="0" ref="getTasksJsonDecoder"/>
+        <constructor-arg index="1" ref="jsonEncoder"/>
+    </bean>
+    <bean id="getTasksJsonDecoder" class="com.ads.cm.network.protocol.decoder.json.JsonDecoder">
+        <property name="className" value="com.ads.cm.model.GetTasksModel"/>
+        <property name="encrypt" value="${content.encrypt}"/>
+    </bean>
+
+    <bean id="reportTaskStatusFactory" class="com.ads.cm.network.protocol.JsonCodecFactory">
+        <constructor-arg index="0" ref="reportTaskStatusJsonDecoder"/>
+        <constructor-arg index="1" ref="jsonEncoder"/>
+    </bean>
+    <bean id="reportTaskStatusJsonDecoder" class="com.ads.cm.network.protocol.decoder.json.JsonDecoder">
+        <property name="className" value="com.ads.cm.model.ReportTaskStatusModel"/>
+        <property name="encrypt" value="${content.encrypt}"/>
+    </bean>
+
+    <bean id="updateTaskStatusJsonDecoderFactory" class="com.ads.cm.network.protocol.JsonCodecFactory">
+        <constructor-arg index="0" ref="updateTaskStatusJsonDecoder"/>
+        <constructor-arg index="1" ref="jsonEncoder"/>
+    </bean>
+    <bean id="updateTaskStatusJsonDecoder" class="com.ads.cm.network.protocol.decoder.json.JsonDecoder">
+        <property name="className" value="com.ads.cm.model.UpdateTaskStatusModel"/>
+        <property name="encrypt" value="${content.encrypt}"/>
+    </bean>
+
+    <bean id="loadManagerJsonDecoderFactory" class="com.ads.cm.network.protocol.JsonCodecFactory">
+        <constructor-arg index="0" ref="loadManagerJsonDecoder"/>
+        <constructor-arg index="1" ref="jsonEncoder"/>
+    </bean>
+    <bean id="loadManagerJsonDecoder" class="com.ads.cm.network.protocol.decoder.json.JsonDecoder">
+        <property name="className" value="com.ads.cm.model.LoadManagerModel"/>
+        <property name="encrypt" value="${content.encrypt}"/>
+    </bean>
+
+    <bean id="jsonEncoder" class="com.ads.cm.network.protocol.encoder.json.JsonEncoder"/>
+    <bean id="kvEncoder" class="com.ads.cm.network.protocol.encoder.kv.KvEncoder"/>
+    <bean id="xmlEncoder" class="com.ads.cm.network.protocol.encoder.xml.XmlEncoder"/>
+</beans>

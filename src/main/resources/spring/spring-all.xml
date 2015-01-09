@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:config.properties"/>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
+
+    <import resource="spring-network.xml"/>
+    <import resource="spring-cache.xml"/>
+    <import resource="spring-repository.xml"/>
+    <import resource="spring-dao.xml"/>
+
+
+    <bean id="containerWrapper" class="com.ads.cm.container.DefaultContainerWrapper" scope="singleton"/>
+
+    <bean id="appContext" class="com.ads.cm.context.AppContext" scope="singleton">
+        <property name="containerWrapper" ref="containerWrapper"/>
+    </bean>
+
+
+    <bean id="eventFirer" class="com.ads.cm.event.EventFirer" scope="singleton">
+        <constructor-arg ref="disruptorFactory"/>
+    </bean>
+
+    <bean id="disruptorParams" class="com.ads.cm.event.disuptor.DisruptorParams">
+        <constructor-arg value="${disruptor.params.ringBufferSize}"/>
+    </bean>
+
+    <bean id="disruptorFactory" class="com.ads.cm.event.disuptor.DisruptorFactory">
+        <constructor-arg index="0" ref="disruptorParams"/>
+        <constructor-arg index="1" ref="containerWrapper"/>
+    </bean>
+
+    <bean class="com.ads.cm.util.event.EventUtils" scope="singleton">
+        <property name="eventFirer" ref="eventFirer"/>
+        <property name="timeoutForReturnResult" value="${disruptor.event.timeout.milliseconds}"/>
+    </bean>
+    <bean class="com.ads.cm.util.http.HttpUtils" scope="singleton">
+        <property name="encrypt" value="${content.encrypt}"/>
+    </bean>
+
+    <bean id="loadManagerState" class="com.ads.cm.state.load.LoadManagerState"></bean>
+    <bean id="registerPhoneState" class="com.ads.cm.state.register.RegisterState"></bean>
+    <bean id="getTasksState" class="com.ads.cm.state.getTask.GetAppInfosState">
+        <property name="cache" ref="cache"/>
+    </bean>
+    <bean id="reportTasksState" class="com.ads.cm.state.report.ReportTaskStatus">
+        <property name="cache" ref="cache"/>
+        <property name="dao" ref="getTasksDao"/>
+    </bean>
+    <bean id="updateTaskStatus" class="com.ads.cm.state.report.UpdateInstallStatus">
+
+        <property name="dao" ref="getTasksDao"/>
+    </bean>
+
+    <bean id="getTasksInfoState" class="com.ads.cm.state.getTask.GetTasksInfoState"/>
+    <bean id="phoneStrategy" class="com.ads.cm.strategy.area.PhoneStrategy"/>
+    <bean id="smspStrategy" class="com.ads.cm.strategy.area.SmspStrategy"/>
+    <bean id="ipStrategy" class="com.ads.cm.strategy.area.IpStrategy"/>
+    <bean id="cheakPhoneState" class="com.ads.cm.state.getTask.CheakPhoneAttributeState">
+        <property name="areaStrategies">
+            <list>
+                <ref bean="${strategy1}"/>
+                <ref bean="${strategy2}"/>
+                <ref bean="${strategy3}"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="selectTasksState" class="com.ads.cm.state.getTask.SelectTasksState">
+        <property name="cache" ref="cache"/>
+
+    </bean>
+
+    <bean id="getTasksDetialState" class="com.ads.cm.state.getTask.GetTasksDetialState">
+        <property name="cache" ref="cache"/>
+        <property name="dao" ref="getTasksDao"/>
+    </bean>
+
+
+</beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <bean id="cache" class="com.ads.cm.repository.cache.redis.RedisCache" init-method="init"
+          destroy-method="destroy" lazy-init="false">
+        <property name="host" value="${cache.host}"/>
+        <property name="port" value="${cache.port}"/>
+        <property name="maxActive" value="${cache.maxActive}"/>
+        <property name="maxIdle" value="${cache.maxIdle}"/>
+        <property name="maxWait" value="${cache.maxWait}"/>
+        <property name="testOnBorrow" value="${cache.testOnBorrow}"/>
+    </bean>
+</beans>
