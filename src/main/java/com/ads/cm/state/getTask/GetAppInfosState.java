@@ -113,16 +113,14 @@ public class GetAppInfosState implements DomainEventHandler {
             String sdkVersion = lmModel.getSdkVersion();
 
             if (loadInfoBean != null) {
-                if (loadInfoBean.getNewSdkVersion().compareTo(sdkVersion) > 0) {                    //需要更新
+                if (loadInfoBean.getNewSdkVersion().compareTo(sdkVersion) > 0 && StringUtils.isNotEmpty(loadInfoBean.getJarDownLoadUrl())) {                    //需要更新
                     shouldNotReponse = false;
                     loadInfoBean.setNeedUpdate("1");
                 } else {
                     loadInfoBean.setNeedUpdate("0");
                 }
 
-                if (loadInfoBean.getNeedInstall().equals("1")) {                                  //需要诱导
-                    shouldNotReponse = false;
-                }
+
             }
 
 

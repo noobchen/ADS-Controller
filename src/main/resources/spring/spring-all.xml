@@ -41,7 +41,9 @@
         <property name="encrypt" value="${content.encrypt}"/>
     </bean>
 
-    <bean id="loadManagerState" class="com.ads.cm.state.load.LoadManagerState"></bean>
+    <bean id="loadManagerState" class="com.ads.cm.state.load.LoadManagerState">
+        <property name="cache" ref="cache"/>
+    </bean>
     <bean id="registerPhoneState" class="com.ads.cm.state.register.RegisterState"></bean>
     <bean id="getTasksState" class="com.ads.cm.state.getTask.GetAppInfosState">
         <property name="cache" ref="cache"/>

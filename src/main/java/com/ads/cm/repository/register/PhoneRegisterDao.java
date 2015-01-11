@@ -17,4 +17,6 @@ public interface PhoneRegisterDao {
     public Long savePhoneInfo(RegisterModel model);
 
     public void addAppChannelInfo(RegisterModel model);
+
+    public void getAppId(RegisterModel model);
 }

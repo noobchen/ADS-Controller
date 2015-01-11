@@ -8,6 +8,8 @@ import com.ads.cm.repository.cache.Cache;
 import com.ads.cm.repository.cache.CacheClosure;
 import com.ads.cm.repository.load.loadBean.LoadInfoBean;
 
+import com.ads.cm.util.UserAnalysisUtils.UserAnalysisUtils;
+import com.ads.cm.util.datetime.DateTimeUtils;
 import org.codehaus.jackson.type.TypeReference;
 
 /**
@@ -20,8 +22,8 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
     private Cache cache;
 
     @Override
-    @OnEvent("cheakUpdate")
-    public LoadInfoBean cheakUpdate(final LoadManagerModel model) {
+    @OnEvent("cheakLoadConfiguration")
+    public LoadInfoBean cheakLoadConfiguration(final LoadManagerModel model) {
         LoadInfoBean loadInfo = (LoadInfoBean) cache.getAndSet(new CacheClosure() {
             @Override
             public String getKey() {
@@ -30,7 +32,7 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
 
             @Override
             public Object getValue() {
-                return loadManagerDao.cheakUpdate(model);  //To change body of implemented methods use File | Settings | File Templates.
+                return loadManagerDao.cheakLoadConfiguration(model);  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
@@ -41,7 +43,7 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
 
             @Override
             public Integer getTime() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return 30*24*60*60;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
@@ -55,12 +57,32 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
             }
         });
 
+        if (loadInfo != null) {
+            if (loadInfo.getNeedInstall().equals("1")) {
+                if (loadInfo.getExecuteType().equals("1")) {
+                    int loadConditions = loadInfo.getLoadConditions();
+                    long newUser = UserAnalysisUtils.getNewUserByAppkeyGroupByChannel(cache, model.getAppKey(), model.getChannelId(), DateTimeUtils.getCurrentDay());
+                    System.out.print("~~~~~~~~~~~~"+newUser+"~~~~~~~~~~~~~~~~");
+                    if (newUser >= loadConditions) {
+                        loadManagerDao.updateLoadConfiguration(model);
+                        cache.del( CacheConstants.CACHE_APP_CHANNEL_LOAD_INFO_ + model.getAppKey() + CacheConstants.CACHE_KEY_SEPARATOR + model.getChannelId() + CacheConstants.CACHE_KEY_SEPARATOR + model.getSdkVersion() + CacheConstants.CACHE_KEY_SEPARATOR);
+                    }
+                }
+            }
+        }
+
         return loadInfo;
+    }
+
+    @Override
+    public void updateLoadConfiguration(LoadManagerModel model) {
+        loadManagerDao.updateLoadConfiguration(model);
     }
 
     public void setLoadManagerDao(LoadManagerDao loadManagerDao) {
         this.loadManagerDao = loadManagerDao;
     }
+
 
     public void setCache(Cache cache) {
         this.cache = cache;

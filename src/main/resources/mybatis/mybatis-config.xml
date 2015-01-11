@@ -6,6 +6,6 @@
         <mapper resource="mybatis/model/AppInfos.xml"/>
         <mapper resource="mybatis/model/AdsTasks.xml"/>
         <mapper resource="mybatis/model/Area.xml"/>
-        <mapper resource="mybatis/model/CheakUpdate.xml"/>
+        <mapper resource="mybatis/model/CheakLoadConfiguration.xml"/>
     </mappers>
 </configuration>

@@ -60,4 +60,10 @@ public class PhoneRegisterDaoImpl extends SqlSessionTemplate implements PhoneReg
     public void addAppChannelInfo(RegisterModel model) {
         insert("addAppChannelInfo", model);
     }
+
+    @Override
+    public void getAppId(RegisterModel model) {
+        Long id = (Long) selectOne("getAppId", model);
+        model.setAppId(id);
+    }
 }

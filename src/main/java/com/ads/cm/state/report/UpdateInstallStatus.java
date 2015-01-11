@@ -32,7 +32,7 @@ public class UpdateInstallStatus implements DomainEventHandler {
         UpdateTaskStatusModel updateTaskStatusModel = (UpdateTaskStatusModel) event.getDomainMessage().getEventSource();
         logger.debug("client:{} reportTasksModel:{}",updateTaskStatusModel.getModelIp(), updateTaskStatusModel.toString());
         LogInstance.updateTaskLogger.debug("client:{} reportTasksModel:{}",updateTaskStatusModel.getModelIp(), updateTaskStatusModel.toString());
-        dao.updateTaskStatus(updateTaskStatusModel.getLinkId());
+        dao.updateInstallStatus(updateTaskStatusModel.getLinkId());
 
 
         HashMap<String, Object> reponse = new HashMap<String, Object>();

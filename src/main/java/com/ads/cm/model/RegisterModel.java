@@ -5,6 +5,7 @@ import com.ads.cm.repository.area.areaBean.Area;
 import com.ads.cm.util.event.EventUtils;
 import com.ads.cm.util.phone.PhoneUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
@@ -49,6 +50,9 @@ public class RegisterModel extends ClientRequestModel {
     public String channelName = "undefined"; //app渠道名,默认值是undefined兼容之前版本。
 
     @JsonIgnore
+    public Long appId ;
+
+    @JsonIgnore
     private String ip;
 
     @JsonIgnore
@@ -86,6 +90,14 @@ public class RegisterModel extends ClientRequestModel {
             this.mac = mac;
         }
 
+    }
+
+    public Long getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Long appId) {
+        this.appId = appId;
     }
 
     public Long getId() {
@@ -227,43 +239,27 @@ public class RegisterModel extends ClientRequestModel {
 
     @Override
     public String toString() {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("isRoot:");
-        stringBuilder.append(isRoot);
-        stringBuilder.append("sdk_version:");
-        stringBuilder.append(sdk_version);
-        stringBuilder.append("app_key:");
-        stringBuilder.append(app_key);
-        stringBuilder.append("phoneNum:");
-        stringBuilder.append(phoneNum);
-        stringBuilder.append("imei:");
-        stringBuilder.append(imei);
-        stringBuilder.append("imsi:");
-        stringBuilder.append(imsi);
-        stringBuilder.append("phone_factory:");
-        stringBuilder.append(phone_factory);
-        stringBuilder.append("phone_version:");
-        stringBuilder.append(phone_version);
-//        stringBuilder.append("service_center:");
-//        stringBuilder.append(service_center);
-        stringBuilder.append("os_version:");
-        stringBuilder.append(os_version);
-        stringBuilder.append("packageName:");
-        stringBuilder.append(packageName);
-        stringBuilder.append("app_Name:");
-        stringBuilder.append(app_Name);
-        stringBuilder.append("os_int:");
-        stringBuilder.append(os_int);
-        stringBuilder.append("mac:");
-        stringBuilder.append(mac);
-        stringBuilder.append("channelName:");
-        stringBuilder.append(channelName);
-
-        return stringBuilder.toString();
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("isRoot", isRoot)
+                .append("sdk_version", sdk_version)
+                .append("app_key", app_key)
+                .append("phoneNum", phoneNum)
+                .append("imei", imei)
+                .append("imsi", imsi)
+                .append("phone_factory", phone_factory)
+                .append("phone_version", phone_version)
+                .append("os_version", os_version)
+                .append("packageName", packageName)
+                .append("app_Name", app_Name)
+                .append("os_int", os_int)
+                .append("mac", mac)
+                .append("channelName", channelName)
+                .append("appId", appId)
+                .append("ip", ip)
+                .append("area", area)
+                .toString();
     }
-
 
     @Override
     public DomainMessage fireSelf() {
@@ -280,6 +276,12 @@ public class RegisterModel extends ClientRequestModel {
         EventUtils.fireEvent(em, "getAppInfos");
         return em;
 
+    }
+
+    public DomainMessage cheakAppKeyExits(){
+        DomainMessage em = new DomainMessage(app_key + "," + channelName);
+        EventUtils.fireEvent(em, "cheakAppKeyExits");
+        return em;
     }
 
 

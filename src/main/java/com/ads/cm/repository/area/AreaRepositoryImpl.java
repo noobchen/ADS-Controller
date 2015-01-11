@@ -53,7 +53,7 @@ public class AreaRepositoryImpl implements AreaRepository {
 
             @Override
             public Integer getTime() {
-                return null;
+                return 30*24*60*60;
             }
 
             @Override
@@ -101,7 +101,7 @@ public class AreaRepositoryImpl implements AreaRepository {
 
             @Override
             public Integer getTime() {
-                return null;
+                return 30*24*60*60;
             }
 
             @Override
@@ -142,7 +142,7 @@ public class AreaRepositoryImpl implements AreaRepository {
 
             @Override
             public Integer getTime() {
-                return null;
+                return 30*24*60*60;
             }
 
             @Override

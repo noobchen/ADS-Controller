@@ -27,14 +27,29 @@
         SELECT
         id
         FROM
+
         tbl_app_channel_info
         WHERE
+
         app_id = (select id from tbl_app_info where app_key = #{app_key})
         AND
+
         channel_id = #{channelName}
 
         LIMIT
         1
+    </select>
+
+    <select id="getAppId" parameterType="com.ads.cm.model.RegisterModel" resultType="java.lang.Long">
+            SELECT
+                id
+            FROM
+                tbl_app_info
+            WHERE
+                app_key = #{app_key}
+
+            LIMIT
+                1
     </select>
 
     <insert id="addAppChannelInfo" parameterType="com.ads.cm.model.RegisterModel">
@@ -43,7 +58,7 @@
         channel_id,
         create_time
         )VALUES(
-         (select id from tbl_app_info where app_key = #{app_key}),
+        #{appId,jdbcType=INTEGER},
         #{channelName,jdbcType=VARCHAR},
         NOW()
         )
@@ -89,7 +104,7 @@
                 tbl_app_channel_info
             WHERE
                 app_id = ( select id from tbl_app_info where app_key = #{key} )
-                AND
+            AND
                 channel_id = #{channelId}
 
             LIMIT

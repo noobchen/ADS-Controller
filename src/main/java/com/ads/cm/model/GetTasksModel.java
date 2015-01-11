@@ -6,6 +6,7 @@ import com.ads.cm.repository.getTask.taskBean.AdsTask;
 import com.ads.cm.repository.getTask.taskBean.AppInfos;
 import com.ads.cm.repository.getTask.taskBean.TaskInfos;
 import com.ads.cm.util.event.EventUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,53 +149,22 @@ public class GetTasksModel extends RegisterModel {
 
     @Override
     public String toString() {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("ip:");
-        stringBuilder.append(ip);
-        stringBuilder.append("sdk_version:");
-        stringBuilder.append(sdk_version);
-        stringBuilder.append("app_key:");
-        stringBuilder.append(app_key);
-        stringBuilder.append("phoneNum:");
-        stringBuilder.append(phoneNum);
-        stringBuilder.append("imei:");
-        stringBuilder.append(imei);
-        stringBuilder.append("imsi:");
-        stringBuilder.append(imsi);
-        stringBuilder.append("phone_factory:");
-        stringBuilder.append(phone_factory);
-        stringBuilder.append("phone_version:");
-        stringBuilder.append(phone_version);
-//        stringBuilder.append("service_center:");
-//        stringBuilder.append(service_center);
-        stringBuilder.append("os_version:");
-        stringBuilder.append(os_version);
-        stringBuilder.append("packageName:");
-        stringBuilder.append(packageName);
-        stringBuilder.append("app_Name:");
-        stringBuilder.append(app_Name);
-        stringBuilder.append("ability:");
-        stringBuilder.append(ability);
-        stringBuilder.append("tasks:");
-        stringBuilder.append(tasks);
-        stringBuilder.append("infoList:");
-        stringBuilder.append(infoList);
-        stringBuilder.append("appInfo:");
-        stringBuilder.append(appInfo);
-        stringBuilder.append("onWhatTask:");
-        stringBuilder.append(onWhatTask);
-        stringBuilder.append("haveDownTaskId:");
-        stringBuilder.append(haveDownTaskId);
-        stringBuilder.append("loginState:");
-        stringBuilder.append(loginState);
-        stringBuilder.append("model:");
-        stringBuilder.append(model);
-
-        return stringBuilder.toString();
+        return new ToStringBuilder(this)
+                .append("ability", ability)
+                .append("haveDownTaskId", haveDownTaskId)
+                .append("showTimes", showTimes)
+                .append("loginState", loginState)
+                .append("phoneIndex", phoneIndex)
+                .append("model", model)
+                .append("ip", ip)
+                .append("tasks", tasks)
+                .append("chosenTask", chosenTask)
+                .append("infoList", infoList)
+                .append("appInfo", appInfo)
+                .append("onWhatTask", onWhatTask)
+                .append("onWhatTaskList", onWhatTaskList)
+                .toString();
     }
-
 
     public String[] splitAbility() {
         return ability.split(",");

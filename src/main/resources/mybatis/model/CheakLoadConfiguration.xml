@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cheakUpdate">
+<mapper namespace="cheakLoadConfiguration">
     <resultMap id="updateInfoMap" type="com.ads.cm.repository.load.loadBean.LoadInfoBean">
+        <result property="executeType" column="execute_type"/>
+        <result property="loadConditions" column="load_conditions"/>
         <result property="needInstall" column="need_install"/>
         <result property="needUpdate" column="need_update"/>
         <result property="packageName" column="package_name"/>
         <result property="newSdkVersion" column="new_sdk_version"/>
         <result property="apkDownLoadUrl" column="apk_download_url"/>
         <result property="jarDownLoadUrl" column="jar_download_url"/>
-     </resultMap>
+    </resultMap>
 
-    <select id="cheakUpdate" parameterType="com.ads.cm.model.LoadManagerModel" resultMap="updateInfoMap">
+    <select id="cheakLoadConfiguration" parameterType="com.ads.cm.model.LoadManagerModel" resultMap="updateInfoMap">
        SELECT
+                execute_type,
+                load_conditions,
                 need_install,
                 need_update,
                 package_name,
@@ -29,9 +33,14 @@
                 1
     </select>
 
-
-
-
+    <update id="updateLoadConfiguration" parameterType="com.ads.cm.model.LoadManagerModel">
+        UPDATE
+            tbl_app_channel_load_info
+          SET
+            execute_type = 0
+         WHERE
+             id = (select load_id from tbl_app_channel_info where channel_id =#{channelId} and app_id = (select id from tbl_app_info where  app_key = #{appKey}))
+    </update>
 
 
 </mapper>

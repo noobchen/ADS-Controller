@@ -99,7 +99,8 @@
         UPDATE
             tbl_task_report_info
           SET
-            installState = 1
+            installState = 1,
+            errorCode = 0
          WHERE
             id = #{id}
     </update>

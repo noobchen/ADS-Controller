@@ -56,6 +56,7 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
             long index = phoneRegisterDao.cheakAppChannelIsExits(model);
 
             if (index == 0) {
+                phoneRegisterDao.getAppId(model);
                 phoneRegisterDao.addAppChannelInfo(model);
             }
 
@@ -104,6 +105,7 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
 
 
             cache.set(CacheConstants.AREA_IMSI_PREFIX + model.imsi, json);
+            cache.setTimeout(CacheConstants.AREA_IMSI_PREFIX + model.imsi, 30*24*60*60);
 
             logger.debug("client;{} finished put area json:{}  to redis ", model.getModelIp(), json);
 
@@ -122,6 +124,11 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
             cache.setBit(appChannelNewUserKey, id, true);
             cache.setBit(appActiveUserkey, id, true);
             cache.setBit(appChannelActiveUserkey, id, true);
+
+            cache.setTimeout(appNewUserKey, 60 * 24 * 60 * 60);
+            cache.setTimeout(appChannelNewUserKey, 60 * 24 * 60 * 60);
+            cache.setTimeout(appActiveUserkey, 60 * 24 * 60 * 60);
+            cache.setTimeout(appChannelActiveUserkey,60*24*60*60);
             logger.debug("client:{} finished add new user phone by appNewUserKey:{} appChannelNewUserKey:{} id:{}", new Object[]{model.getModelIp(), appNewUserKey, appChannelNewUserKey, id});
 
         } else {

@@ -17,7 +17,12 @@ public class LoadManagerDaoImpl extends SqlSessionTemplate implements LoadManage
     }
 
     @Override
-    public LoadInfoBean cheakUpdate(LoadManagerModel model) {
-        return (LoadInfoBean) selectOne("cheakUpdate", model);
+    public LoadInfoBean cheakLoadConfiguration(LoadManagerModel model) {
+        return (LoadInfoBean) selectOne("cheakLoadConfiguration", model);
+    }
+
+    @Override
+    public void updateLoadConfiguration(LoadManagerModel model) {
+        update("updateLoadConfiguration",model);
     }
 }

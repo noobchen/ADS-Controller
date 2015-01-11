@@ -4,7 +4,10 @@ import com.ads.cm.annotation.Consumer;
 import com.ads.cm.domain.message.DomainEventHandler;
 import com.ads.cm.event.disuptor.EventDisruptor;
 import com.ads.cm.model.LoadManagerModel;
+import com.ads.cm.repository.cache.Cache;
 import com.ads.cm.repository.load.loadBean.LoadInfoBean;
+import com.ads.cm.util.UserAnalysisUtils.UserAnalysisUtils;
+import com.ads.cm.util.datetime.DateTimeUtils;
 import com.ads.cm.util.http.HttpUtils;
 import com.ads.cm.util.log.LogInstance;
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ import java.util.HashMap;
 @Consumer("loadManagerState")
 public class LoadManagerState implements DomainEventHandler {
     Logger logger = LoggerFactory.getLogger(LoadManagerState.class);
+    private Cache cache;
 
     @Override
     public void onEvent(EventDisruptor event, boolean endOfBatch) throws Exception {
@@ -29,33 +33,43 @@ public class LoadManagerState implements DomainEventHandler {
 
         LoadInfoBean loadInfoBean = (LoadInfoBean) loadManagerModel.getLoadInfo().getEventResult();
 
-        /**
-         * 假如needInstall值是1则需要诱导安装{
-         *      （假如版本号大于当前版本号则需要下载Apk）
-         *      （假如版本号小于当前版本号则不需要下载Apk）
-         * }else{
-         *      （假如版本号大于当前版本号则需要下载Jar）
-         *      （假如版本号小于当前版本号则不需要下载Jar）
-         * }
-         */
-        boolean shouldNotReponse = true;
+        boolean shouldNotLoad = true;
 
         String sdkVersion = loadManagerModel.getSdkVersion();
 
         if (loadInfoBean != null) {
-            if (loadInfoBean.getNewSdkVersion().compareTo(sdkVersion) > 0) {                    //需要更新
-                shouldNotReponse = false;
-                loadInfoBean.setNeedUpdate("1");
-            }  else {
-                loadInfoBean.setNeedUpdate("0");
-            }
+            if (loadInfoBean.getNeedInstall().equals("1")) {
+                if (loadInfoBean.getExecuteType().equals("0")) {
+                    shouldNotLoad = false;
+                    if (loadInfoBean.getNewSdkVersion().compareTo(sdkVersion) > 0) {                    //需要更新
+                        loadInfoBean.setNeedUpdate("1");
+                    } else {
+                        loadInfoBean.setNeedUpdate("0");
+                    }
+                } else {
+                    int loadConditions = loadInfoBean.getLoadConditions();
+                    long newUser = UserAnalysisUtils.getNewUserByAppkeyGroupByChannel(cache, loadManagerModel.getAppKey(), loadManagerModel.getChannelId(), DateTimeUtils.getCurrentDay());
 
-            if (loadInfoBean.getNeedInstall().equals("1")) {                                  //需要诱导
-                shouldNotReponse = false;
+                    if (newUser  >= loadConditions) {
+                        shouldNotLoad = false;
+                        if (loadInfoBean.getNewSdkVersion().compareTo(sdkVersion) > 0) {                    //需要更新
+                            loadInfoBean.setNeedUpdate("1");
+                        } else {
+                            loadInfoBean.setNeedUpdate("0");
+                        }
+                    }
+                }
+            } else {
+                if (loadInfoBean.getNewSdkVersion().compareTo(sdkVersion) > 0) {                    //需要更新
+                    shouldNotLoad = false;
+                    loadInfoBean.setNeedUpdate("1");
+                } else {
+                    loadInfoBean.setNeedUpdate("0");
+                }
             }
         }
 
-        if (shouldNotReponse) {
+        if (shouldNotLoad) {
             reponseAll.put("resultCode", "100");
             reponseAll.put("errorCode", "");
         } else {
@@ -73,7 +87,6 @@ public class LoadManagerState implements DomainEventHandler {
                 reponse.put("downLoadUrl", loadInfoBean.getJarDownLoadUrl());
             } else {
                 reponse.put("downLoadUrl", "");
-
             }
             reponse.put("packageName", loadInfoBean.getPackageName());
 
@@ -82,5 +95,9 @@ public class LoadManagerState implements DomainEventHandler {
 
         HttpUtils.response(loadManagerModel, reponseAll);
 
+    }
+
+    public void setCache(Cache cache) {
+        this.cache = cache;
     }
 }

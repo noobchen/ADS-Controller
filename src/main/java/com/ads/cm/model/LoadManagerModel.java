@@ -54,7 +54,7 @@ public class LoadManagerModel extends ClientRequestModel {
 
     public DomainMessage getLoadInfo() {
         DomainMessage em = new DomainMessage(this);
-        EventUtils.fireEvent(em, "cheakUpdate");
+        EventUtils.fireEvent(em, "cheakLoadConfiguration");
 
         return em;
     }

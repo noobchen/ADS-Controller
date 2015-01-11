@@ -9,5 +9,9 @@ import com.ads.cm.repository.load.loadBean.LoadInfoBean;
  */
 public interface LoadManagerRepository {
 
-    public LoadInfoBean cheakUpdate(LoadManagerModel model);
+    public LoadInfoBean cheakLoadConfiguration(LoadManagerModel model);
+
+    public void updateLoadConfiguration(LoadManagerModel model);
+    
+    
 }
