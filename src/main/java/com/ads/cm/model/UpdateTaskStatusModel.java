@@ -27,4 +27,11 @@ public class UpdateTaskStatusModel extends ClientRequestModel {
         EventUtils.fireEvent(em, "updateInstallStatus");
         return em;
     }
+
+    public DomainMessage transmitUpdateInstallStatus() {
+        DomainMessage em = new DomainMessage(this);
+        EventUtils.fireEvent(em, "transmitUpdateInstallStatus");
+        return em;
+
+    }
 }

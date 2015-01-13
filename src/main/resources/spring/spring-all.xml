@@ -45,6 +45,17 @@
         <property name="cache" ref="cache"/>
     </bean>
     <bean id="registerPhoneState" class="com.ads.cm.state.register.RegisterState"></bean>
+    <bean id="transmitRegisterState" class="com.ads.cm.state.register.TransmitRegisterState">
+        <property name="cache" ref="cache"/>
+    </bean>
+    <bean id="transmitGetTaskState" class="com.ads.cm.state.getTask.TransmitGetTaskState">
+        <property name="cache" ref="cache"/>
+    </bean>
+
+    <bean id="transmitReportTaskState" class="com.ads.cm.state.report.TransmitReportTaskState">
+        <property name="cache" ref="cache"/>
+    </bean>
+
     <bean id="getTasksState" class="com.ads.cm.state.getTask.GetAppInfosState">
         <property name="cache" ref="cache"/>
     </bean>
@@ -53,8 +64,12 @@
         <property name="dao" ref="getTasksDao"/>
     </bean>
     <bean id="updateTaskStatus" class="com.ads.cm.state.report.UpdateInstallStatus">
-
+        <property name="cache" ref="cache"/>
         <property name="dao" ref="getTasksDao"/>
+    </bean>
+
+    <bean id="transmitUpdateTaskStatus" class="com.ads.cm.state.report.TransmitUpdateInstallStatus">
+        <property name="cache" ref="cache"/>
     </bean>
 
     <bean id="getTasksInfoState" class="com.ads.cm.state.getTask.GetTasksInfoState"/>

@@ -39,6 +39,13 @@ public class ReportTaskStatus implements DomainEventHandler {
         logger.debug("client:{} reportTasksModel:{}", reportTasksModel.getModelIp(), reportTasksModel.toString());
         LogInstance.reportTaskLogger.debug("client:{} reportTasksModel:{}", reportTasksModel.getModelIp(), reportTasksModel.toString());
 
+        String zlbTaskKey = CacheConstants.ZLB_GETTASK_KEY + reportTasksModel.getReportTblId();
+
+        if (cache.exists(zlbTaskKey)) {
+            reportTasksModel.transmitReportTaskState();
+            return;
+        }
+
         TaskInfos task = (TaskInfos) reportTasksModel.getTaskInfoByTaskId().getEventResult();
 
 

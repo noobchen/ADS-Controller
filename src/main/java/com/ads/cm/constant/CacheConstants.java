@@ -48,6 +48,9 @@ public class CacheConstants {
     public static final String AREA_SMSP_PREFIX = "a_s_";
     public static final String AREA_IMSI_PREFIX = "a_i_";
 
+    public static final String ZLB_REGISTER_ID_KEY_ = "zlb_r_d_";
+    public static final String ZLB_GETTASK_KEY = "zlb_g_";
+
 
 
 

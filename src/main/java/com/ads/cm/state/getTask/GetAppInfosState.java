@@ -12,6 +12,7 @@ import com.ads.cm.repository.cache.Cache;
 import com.ads.cm.repository.getTask.taskBean.AppInfos;
 import com.ads.cm.repository.getTask.taskBean.TaskInfos;
 import com.ads.cm.repository.load.loadBean.LoadInfoBean;
+import com.ads.cm.util.Transmit.TransmitUtils;
 import com.ads.cm.util.datetime.DateTimeUtils;
 import com.ads.cm.util.http.HttpUtils;
 import com.ads.cm.util.log.LogInstance;
@@ -39,6 +40,11 @@ public class GetAppInfosState implements DomainEventHandler {
     @Override
     public void onEvent(EventDisruptor event, boolean endOfBatch) throws Exception {
         GetTasksModel getTasksModel = (GetTasksModel) event.getDomainMessage().getEventSource();
+
+        if (TransmitUtils.cheakIsTransmit(getTasksModel)) {
+            getTasksModel.transmitGetTask();
+            return;
+        }
 
         getTasksModel.setIp((String) getTasksModel.getProperty(getTasksModel.IP_KEY));
 

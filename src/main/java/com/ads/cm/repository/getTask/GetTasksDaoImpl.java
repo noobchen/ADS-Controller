@@ -31,17 +31,17 @@ public class GetTasksDaoImpl extends SqlSessionTemplate implements GetTasksDao {
 
         String channelId = keyAndChannel[1];
         String key = keyAndChannel[0];
+        /**
+         if (channelId.equals("undefined")) {                                                //兼容之前未分渠道版本SDK
+         infos = (AppInfos) selectOne("getAppInfo", key);
+         } else { */
+        HashMap<String, String> queryMap = new HashMap<String, String>();
 
-        if (channelId.equals("undefined")) {                                                //兼容之前未分渠道版本SDK
-            infos = (AppInfos) selectOne("getAppInfo", key);
-        } else {
-            HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("channelId", channelId);
+        queryMap.put("key", key);
 
-            queryMap.put("channelId", channelId);
-            queryMap.put("key", key);
-
-            infos = (AppInfos) selectOne("getAppInfoV2", queryMap);
-        }
+        infos = (AppInfos) selectOne("getAppInfoV2", queryMap);
+//        }
 
         return infos;
 

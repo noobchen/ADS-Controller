@@ -21,6 +21,8 @@ public abstract class ClientRequestModel {
     public static final String HTTP_PHONE_KEY = "p";
     @JsonIgnore
     public final String IP_KEY = "i";
+    @JsonIgnore
+    public final String REQUEST_CONTENT_KEY = "c";
 
 
     @JsonIgnore

@@ -36,12 +36,15 @@ public class RegisterState implements DomainEventHandler {
     @Override
     public void onEvent(EventDisruptor event, boolean endOfBatch) throws Exception {
         //To change body of implemented methods use File | Settings | File Templates.
+
+
         HashMap<String, Object> response = new HashMap<String, Object>();    //返回客户端数据
 
         RegisterModel registerModel = (RegisterModel) event.getDomainMessage().getEventSource();
         logger.debug("client;{}  registerModel:{}", registerModel.getModelIp(), registerModel.toString());
         LogInstance.registerLogger.debug("client;{}  registerModel:{}", registerModel.getModelIp(), registerModel.toString());
 
+        registerModel.transmitRegisterState();
 
         if (StringUtils.isEmpty(registerModel.getApp_key())) {                   //兼容之前版本未分配key异常
             registerModel.setApp_key("1-1-1");
@@ -57,20 +60,7 @@ public class RegisterState implements DomainEventHandler {
             return;
         }
 
-        /**
-         AppInfos appInfos = (AppInfos) registerModel.getAppInfos().getEventResult();
 
-
-         if (appInfos == null) {
-         response.put("resultCode", "100");
-         response.put("errorCode", "100");//无效的AppKey
-
-         HttpUtils.response(registerModel, response);
-         logger.debug("client;{} appInfos is null by appKey:{}", registerModel.getModelIp(), registerModel.app_key);
-         LogInstance.registerLogger.debug("client;{} appInfos is null by appKey:{}", registerModel.getModelIp(), registerModel.app_key);
-         return;
-         } else {              //存储用户数据返回状态客户端
-         */
         long index = (Long) registerModel.savePhoneInfo().getEventResult();
 
         response.put("resultCode", "200");
@@ -78,8 +68,6 @@ public class RegisterState implements DomainEventHandler {
 
         HttpUtils.response(registerModel, response);
 
-
-//        }
 
 
     }

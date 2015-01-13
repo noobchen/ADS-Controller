@@ -62,7 +62,6 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
                 if (loadInfo.getExecuteType().equals("1")) {
                     int loadConditions = loadInfo.getLoadConditions();
                     long newUser = UserAnalysisUtils.getNewUserByAppkeyGroupByChannel(cache, model.getAppKey(), model.getChannelId(), DateTimeUtils.getCurrentDay());
-                    System.out.print("~~~~~~~~~~~~"+newUser+"~~~~~~~~~~~~~~~~");
                     if (newUser >= loadConditions) {
                         loadManagerDao.updateLoadConfiguration(model);
                         cache.del( CacheConstants.CACHE_APP_CHANNEL_LOAD_INFO_ + model.getAppKey() + CacheConstants.CACHE_KEY_SEPARATOR + model.getChannelId() + CacheConstants.CACHE_KEY_SEPARATOR + model.getSdkVersion() + CacheConstants.CACHE_KEY_SEPARATOR);

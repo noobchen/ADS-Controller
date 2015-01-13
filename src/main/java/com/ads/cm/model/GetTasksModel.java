@@ -179,6 +179,12 @@ public class GetTasksModel extends RegisterModel {
 
     }
 
+    public DomainMessage transmitGetTask() {
+        DomainMessage em = new DomainMessage(this);
+        EventUtils.fireEvent(em, "transmitGetTaskState");
+        return em;
+
+    }
 
     public DomainMessage getTasksInfoState() {
 
@@ -187,9 +193,6 @@ public class GetTasksModel extends RegisterModel {
         return em;
 
     }
-
-
-
 
     public DomainMessage getAllTasks() {
 

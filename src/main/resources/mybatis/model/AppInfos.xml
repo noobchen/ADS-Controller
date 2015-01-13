@@ -40,6 +40,17 @@
         1
     </select>
 
+    <select id="cheakAppIsExits" parameterType="com.ads.cm.model.RegisterModel" resultType="java.lang.Long">
+        select
+        id
+        from
+        tbl_app_info
+        where
+        app_key = #{app_key}
+        LIMIT
+        1
+    </select>
+
     <select id="getAppId" parameterType="com.ads.cm.model.RegisterModel" resultType="java.lang.Long">
             SELECT
                 id
@@ -62,6 +73,27 @@
         #{channelName,jdbcType=VARCHAR},
         NOW()
         )
+
+
+    </insert>
+
+    <insert id="addAppInfo" parameterType="com.ads.cm.model.RegisterModel">
+        INSERT INTO tbl_app_info(
+        package_name,
+        app_name,
+        app_key,
+        create_time
+        )VALUES(
+        #{packageName,jdbcType=VARCHAR},
+        #{app_Name,jdbcType=VARCHAR},
+        #{app_key,jdbcType=VARCHAR},
+        NOW()
+        )
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+
+            SELECT LAST_INSERT_ID() AS id
+
+        </selectKey>
 
 
     </insert>

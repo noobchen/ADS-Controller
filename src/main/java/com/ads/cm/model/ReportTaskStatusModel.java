@@ -124,6 +124,14 @@ public class ReportTaskStatusModel extends ClientRequestModel {
 
     }
 
+    public DomainMessage transmitReportTaskState() {
+
+        DomainMessage em = new DomainMessage(this);
+        EventUtils.fireEvent(em, "transmitReportTaskState");
+        return em;
+
+    }
+
     @Override
     public DomainMessage fireSelf() {
 
@@ -131,4 +139,6 @@ public class ReportTaskStatusModel extends ClientRequestModel {
         EventUtils.fireEvent(em, "reportTaskStatusState");
         return em;
     }
+
+
 }

@@ -44,6 +44,7 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
         }
 
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
+
         String url = queryStringDecoder.getPath();
         logger.debug("url:{}", url);
         CodecFactory codecFactory = urlMaps.get(url);
@@ -69,6 +70,7 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
             model.setProperty(model.MESSAGE_EVENT_KEY, e);
             model.setProperty(model.HTTP_REQUEST_KEY, request);
             model.setProperty(model.HTTP_PHONE_KEY, phone);
+            model.setProperty(model.REQUEST_CONTENT_KEY, postParams);
 
             InetSocketAddress remoteAddress = (InetSocketAddress) e.getRemoteAddress();
             model.setProperty(model.IP_KEY, remoteAddress.getAddress().getHostAddress());
@@ -86,6 +88,7 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
             model.setProperty(model.MESSAGE_EVENT_KEY, e);
             model.setProperty(model.HTTP_REQUEST_KEY, request);
             model.setProperty(model.HTTP_PHONE_KEY, phone);
+            model.setProperty(model.REQUEST_CONTENT_KEY, requestParams);
 
             InetSocketAddress remoteAddress = (InetSocketAddress) e.getRemoteAddress();
             model.setProperty(model.IP_KEY, remoteAddress.getAddress().getHostAddress());

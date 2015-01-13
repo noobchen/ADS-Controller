@@ -278,6 +278,12 @@ public class RegisterModel extends ClientRequestModel {
 
     }
 
+    public DomainMessage transmitRegisterState() {
+        DomainMessage em = new DomainMessage(this);
+        EventUtils.fireEvent(em, "transmitRegisterState");
+        return em;
+    }
+
     public DomainMessage cheakAppKeyExits(){
         DomainMessage em = new DomainMessage(app_key + "," + channelName);
         EventUtils.fireEvent(em, "cheakAppKeyExits");
@@ -292,6 +298,8 @@ public class RegisterModel extends ClientRequestModel {
         return em;
 
     }
+
+
 
     public DomainMessage getPhoneAttribute() {
 
