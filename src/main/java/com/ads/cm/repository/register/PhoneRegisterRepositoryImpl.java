@@ -51,12 +51,22 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
 
         if (id == 0) {          //不存在历史数据，新增数据
             logger.debug("client;{} this client dont registered !", model.getModelIp());
+            //判断是否新增应用信息
+            long appIndex = phoneRegisterDao.cheakAppIsExits(model);
+
+            if (appIndex == 0) {
+                appIndex = phoneRegisterDao.addAppInfo(model);
+            }
+
+            model.setAppId(appIndex);
 
             //判断是否新增渠道信息
             long index = phoneRegisterDao.cheakAppChannelIsExits(model);
 
             if (index == 0) {
-                phoneRegisterDao.getAppId(model);
+                if (model.getAppId() == null) {
+                    phoneRegisterDao.getAppId(model);
+                }
                 phoneRegisterDao.addAppChannelInfo(model);
             }
 
@@ -105,7 +115,7 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
 
 
             cache.set(CacheConstants.AREA_IMSI_PREFIX + model.imsi, json);
-            cache.setTimeout(CacheConstants.AREA_IMSI_PREFIX + model.imsi, 30*24*60*60);
+            cache.setTimeout(CacheConstants.AREA_IMSI_PREFIX + model.imsi, 30 * 24 * 60 * 60);
 
             logger.debug("client;{} finished put area json:{}  to redis ", model.getModelIp(), json);
 
@@ -128,7 +138,7 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
             cache.setTimeout(appNewUserKey, 60 * 24 * 60 * 60);
             cache.setTimeout(appChannelNewUserKey, 60 * 24 * 60 * 60);
             cache.setTimeout(appActiveUserkey, 60 * 24 * 60 * 60);
-            cache.setTimeout(appChannelActiveUserkey,60*24*60*60);
+            cache.setTimeout(appChannelActiveUserkey, 60 * 24 * 60 * 60);
             logger.debug("client:{} finished add new user phone by appNewUserKey:{} appChannelNewUserKey:{} id:{}", new Object[]{model.getModelIp(), appNewUserKey, appChannelNewUserKey, id});
 
         } else {

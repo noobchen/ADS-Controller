@@ -1,5 +1,6 @@
 package com.ads.cm.repository.getTask;
 
+import com.ads.cm.constant.ErrorCodeConstant;
 import com.ads.cm.model.ReportTaskStatusModel;
 import com.ads.cm.repository.getTask.taskBean.AdsTask;
 import com.ads.cm.repository.getTask.taskBean.AppInfos;
@@ -94,6 +95,10 @@ public class GetTasksDaoImpl extends SqlSessionTemplate implements GetTasksDao {
 
     @Override
     public void addMoreTaskReport(ReportTaskStatusModel model) {
+        if (model.getGetTaskState() == null){
+            model.setGetTaskState(1);
+        }
+
         update("addMoreTaskReport", model);
     }
 

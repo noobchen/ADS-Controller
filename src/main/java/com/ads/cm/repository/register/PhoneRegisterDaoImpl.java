@@ -40,6 +40,23 @@ public class PhoneRegisterDaoImpl extends SqlSessionTemplate implements PhoneReg
     }
 
     @Override
+    public Long cheakAppIsExits(RegisterModel model) {
+        Long id = (Long) selectOne("cheakAppIsExits", model);
+        if (id != null) {
+            return id;
+        }
+
+        return 0l;
+    }
+
+    @Override
+    public Long addAppInfo(RegisterModel model) {
+        insert("addAppInfo", model);
+
+        return model.getId();
+    }
+
+    @Override
     public Long savePhoneInfo(RegisterModel model) {
         Area area = model.area;
 

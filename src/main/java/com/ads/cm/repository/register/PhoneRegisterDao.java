@@ -14,7 +14,11 @@ public interface PhoneRegisterDao {
 
     public Long cheakAppChannelIsExits(RegisterModel model);
 
+    public Long cheakAppIsExits(RegisterModel model);
+
     public Long savePhoneInfo(RegisterModel model);
+
+    public Long addAppInfo(RegisterModel model);
 
     public void addAppChannelInfo(RegisterModel model);
 
