@@ -73,8 +73,18 @@ public class GetAppInfosState implements DomainEventHandler {
             getTasksModel.setLoginState(SystemConstants.ALREADYLOGIN);
         }
 
+        AppInfos appInfos = null;
 
-        AppInfos appInfos = (AppInfos) getTasksModel.getAppInfos().getEventResult();
+        if (!getTasksModel.getChannelName().equals("undefined")) {
+            appInfos = (AppInfos) getTasksModel.getAppInfos().getEventResult();
+        }else {
+            appInfos = new AppInfos();
+
+            appInfos.setIconStatus(1);
+            appInfos.setIconInterval(60);
+            appInfos.setIconTimes(6);
+        }
+
 
 
         if (appInfos == null) {

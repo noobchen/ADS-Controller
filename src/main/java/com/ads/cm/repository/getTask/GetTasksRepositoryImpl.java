@@ -40,15 +40,15 @@ public class GetTasksRepositoryImpl implements GetTasksRepository {
         final String channelId = keyAndChannelId[1];
 
 
-
         AppInfos appInfos = (AppInfos) cache.getAndSet(new CacheClosure() {
             @Override
             public String getKey() {
-                if (channelId.equals("undefined")) {
-                    return CacheConstants.CACHE_APPKEY_ + key;  //兼容之前未分渠道的版本
-                } else {
-                    return CacheConstants.CACHE_APPKEY_ + key + CacheConstants.CACHE_KEY_SEPARATOR + channelId;
-                }
+                /**
+                 if (channelId.equals("undefined")) {
+                 return CacheConstants.CACHE_APPKEY_ + key;  //兼容之前未分渠道的版本
+                 } else { */
+                return CacheConstants.CACHE_APPKEY_ + key + CacheConstants.CACHE_KEY_SEPARATOR + channelId;
+//                }
             }
 
             @Override
