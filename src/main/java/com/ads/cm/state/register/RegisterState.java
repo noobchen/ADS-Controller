@@ -42,35 +42,21 @@ public class RegisterState implements DomainEventHandler {
         logger.debug("client;{}  registerModel:{}", registerModel.getModelIp(), registerModel.toString());
         LogInstance.registerLogger.debug("client;{}  registerModel:{}", registerModel.getModelIp(), registerModel.toString());
 
-
         if (StringUtils.isEmpty(registerModel.getApp_key())) {                   //兼容之前版本未分配key异常
             registerModel.setApp_key("1-1-1");
         }
 
-        if (registerModel.getApp_key().length() > 30) {
-            response.put("resultCode", "100");
-            response.put("errorCode", "100");//无效的AppKey
+        long appIndex = (Long) registerModel.cheakAppIsExit().getEventResult();
 
-            HttpUtils.response(registerModel, response);
-            logger.debug("client;{} appkey:{} length >30 ", registerModel.getModelIp(), registerModel.app_key);
-            LogInstance.registerLogger.debug("client;{} appkey:{} length >30 ", registerModel.getModelIp(), registerModel.app_key);
+        if (appIndex == 0) {
+            response.put("resultCode", "100");
+            response.put("indexId", 0);
+
             return;
         }
 
-        /**
-         AppInfos appInfos = (AppInfos) registerModel.getAppInfos().getEventResult();
+        registerModel.setAppId(appIndex);
 
-
-         if (appInfos == null) {
-         response.put("resultCode", "100");
-         response.put("errorCode", "100");//无效的AppKey
-
-         HttpUtils.response(registerModel, response);
-         logger.debug("client;{} appInfos is null by appKey:{}", registerModel.getModelIp(), registerModel.app_key);
-         LogInstance.registerLogger.debug("client;{} appInfos is null by appKey:{}", registerModel.getModelIp(), registerModel.app_key);
-         return;
-         } else {              //存储用户数据返回状态客户端
-         */
         long index = (Long) registerModel.savePhoneInfo().getEventResult();
 
         response.put("resultCode", "200");

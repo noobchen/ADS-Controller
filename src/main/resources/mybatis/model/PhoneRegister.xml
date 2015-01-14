@@ -3,7 +3,7 @@
 <mapper namespace="phoneRegister">
 
 
-    <select id="cheakIsExit" parameterType="com.ads.cm.model.RegisterModel" resultType="java.lang.Long">
+    <select id="cheakUserInfoIsExit" parameterType="com.ads.cm.model.RegisterModel" resultType="java.lang.Long">
             SELECT
                 id
             FROM
@@ -17,9 +17,6 @@
             LIMIT
                 1
     </select>
-
-
-
 
 
     <insert id="savePhoneDetial" parameterType="com.ads.cm.model.RegisterModel">

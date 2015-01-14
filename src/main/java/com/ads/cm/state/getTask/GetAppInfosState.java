@@ -55,12 +55,6 @@ public class GetAppInfosState implements DomainEventHandler {
         String appkey = getTasksModel.getApp_key();                       //兼容之前客户端版本无appkey异常
 
         if (appkey == null || appkey.equals("")) {
-//            HashMap<String, Object> response = new HashMap<String, Object>();
-//
-//            response.put("resultCode", "100");
-//            response.put("errorCode", "100");//无效的AppKey
-//
-//            HttpUtils.response(getTasksModel, response);
             logger.debug("client:{} appkey is null,set 1-1-1 to it");
             getTasksModel.setApp_key("1-1-1");
         }

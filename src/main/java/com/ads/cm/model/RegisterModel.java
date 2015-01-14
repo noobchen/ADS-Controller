@@ -278,11 +278,11 @@ public class RegisterModel extends ClientRequestModel {
 
     }
 
-    public DomainMessage cheakAppKeyExits(){
-        DomainMessage em = new DomainMessage(app_key + "," + channelName);
-        EventUtils.fireEvent(em, "cheakAppKeyExits");
-        return em;
-    }
+//    public DomainMessage cheakAppKeyExits(){
+//        DomainMessage em = new DomainMessage(app_key + "," + channelName);
+//        EventUtils.fireEvent(em, "cheakAppKeyExits");
+//        return em;
+//    }
 
 
     public DomainMessage savePhoneInfo() {
@@ -308,4 +308,14 @@ public class RegisterModel extends ClientRequestModel {
         return em;
 
     }
+
+    public DomainMessage cheakAppIsExit() {
+
+        DomainMessage em = new DomainMessage(this);
+        EventUtils.fireEvent(em, "cheakAppIsExit");
+        return em;
+
+    }
+
+
 }

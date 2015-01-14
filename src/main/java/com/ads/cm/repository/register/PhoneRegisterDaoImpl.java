@@ -21,7 +21,7 @@ public class PhoneRegisterDaoImpl extends SqlSessionTemplate implements PhoneReg
 
     @Override
     public Long cheakUserInfoIsExits(RegisterModel model) {
-        Long id = (Long) selectOne("cheakIsExit", model);
+        Long id = (Long) selectOne("cheakUserInfoIsExit", model);
         if (id != null) {
             return id;
         }
