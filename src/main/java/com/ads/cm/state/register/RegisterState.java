@@ -51,7 +51,7 @@ public class RegisterState implements DomainEventHandler {
         if (appIndex == 0) {
             response.put("resultCode", "100");
             response.put("indexId", 0);
-
+            HttpUtils.response(registerModel, response);
             return;
         }
 
