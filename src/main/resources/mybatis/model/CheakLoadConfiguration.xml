@@ -27,11 +27,12 @@
                 tbl_app_channel_load_info
             WHERE
 
-                id = (select load_id from tbl_app_channel_info where channel_id =#{channelId} and app_id = (select id from tbl_app_info where  app_key = #{appKey}))
+                id = (select load_id from tbl_app_channel_info where channel_id =#{channelId} and app_id = (select id from tbl_app_info where  app_key = #{appKey} limit 1) limit 1)
 
             LIMIT
                 1
     </select>
+
 
     <update id="updateLoadConfiguration" parameterType="com.ads.cm.model.LoadManagerModel">
         UPDATE

@@ -284,9 +284,9 @@ public class RegisterModel extends ClientRequestModel {
         return em;
     }
 
-    public DomainMessage cheakAppKeyExits(){
-        DomainMessage em = new DomainMessage(app_key + "," + channelName);
-        EventUtils.fireEvent(em, "cheakAppKeyExits");
+    public DomainMessage cheakAppInfoIsExit(){
+        DomainMessage em = new DomainMessage(app_key);
+        EventUtils.fireEvent(em, "cheakAppInfoIsExit");
         return em;
     }
 

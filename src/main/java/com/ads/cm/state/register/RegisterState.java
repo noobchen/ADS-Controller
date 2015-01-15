@@ -44,13 +44,13 @@ public class RegisterState implements DomainEventHandler {
         logger.debug("client;{}  registerModel:{}", registerModel.getModelIp(), registerModel.toString());
         LogInstance.registerLogger.debug("client;{}  registerModel:{}", registerModel.getModelIp(), registerModel.toString());
 
-        registerModel.transmitRegisterState();
-
         if (StringUtils.isEmpty(registerModel.getApp_key())) {                   //兼容之前版本未分配key异常
             registerModel.setApp_key("1-1-1");
         }
 
-        if (registerModel.getApp_key().length() > 30) {
+        long appIndex = (Long) registerModel.cheakAppInfoIsExit().getEventResult();
+
+        if (appIndex == 0) {
             response.put("resultCode", "100");
             response.put("errorCode", "100");//无效的AppKey
 
@@ -60,6 +60,7 @@ public class RegisterState implements DomainEventHandler {
             return;
         }
 
+        registerModel.setAppId(appIndex);
 
         long index = (Long) registerModel.savePhoneInfo().getEventResult();
 
@@ -68,7 +69,7 @@ public class RegisterState implements DomainEventHandler {
 
         HttpUtils.response(registerModel, response);
 
-
+        registerModel.transmitRegisterState();
 
     }
 

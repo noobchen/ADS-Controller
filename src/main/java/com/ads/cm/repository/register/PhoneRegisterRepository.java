@@ -11,7 +11,9 @@ import com.ads.cm.model.RegisterModel;
  */
 public interface PhoneRegisterRepository {
 
-    public Long cheakIsExit(RegisterModel model);
+    public Long cheakAppInfoIsExit(RegisterModel model);
+
+    public Long cheakUserInfoIsExit(RegisterModel model);
 
     public Long savePhoneInfo(RegisterModel model);
 

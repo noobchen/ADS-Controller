@@ -27,7 +27,7 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
         LoadInfoBean loadInfo = (LoadInfoBean) cache.getAndSet(new CacheClosure() {
             @Override
             public String getKey() {
-                return CacheConstants.CACHE_APP_CHANNEL_LOAD_INFO_ + model.getAppKey() + CacheConstants.CACHE_KEY_SEPARATOR + model.getChannelId() + CacheConstants.CACHE_KEY_SEPARATOR + model.getSdkVersion() + CacheConstants.CACHE_KEY_SEPARATOR;
+                return CacheConstants.CACHE_APP_CHANNEL_LOAD_INFO_ + model.getAppKey() + CacheConstants.CACHE_KEY_SEPARATOR + model.getChannelId();
             }
 
             @Override
@@ -43,7 +43,7 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
 
             @Override
             public Integer getTime() {
-                return 30*24*60*60;  //To change body of implemented methods use File | Settings | File Templates.
+                return 30 * 24 * 60 * 60;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
@@ -64,7 +64,7 @@ public class LoadManagerRepositoryImpl implements LoadManagerRepository {
                     long newUser = UserAnalysisUtils.getNewUserByAppkeyGroupByChannel(cache, model.getAppKey(), model.getChannelId(), DateTimeUtils.getCurrentDay());
                     if (newUser >= loadConditions) {
                         loadManagerDao.updateLoadConfiguration(model);
-                        cache.del( CacheConstants.CACHE_APP_CHANNEL_LOAD_INFO_ + model.getAppKey() + CacheConstants.CACHE_KEY_SEPARATOR + model.getChannelId() + CacheConstants.CACHE_KEY_SEPARATOR + model.getSdkVersion() + CacheConstants.CACHE_KEY_SEPARATOR);
+                        cache.del(CacheConstants.CACHE_APP_CHANNEL_LOAD_INFO_ + model.getAppKey() + CacheConstants.CACHE_KEY_SEPARATOR + model.getChannelId() + CacheConstants.CACHE_KEY_SEPARATOR + model.getSdkVersion() + CacheConstants.CACHE_KEY_SEPARATOR);
                     }
                 }
             }

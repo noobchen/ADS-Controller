@@ -35,7 +35,14 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
     private PhoneRegisterDao phoneRegisterDao;
     private List<AreaStrategy> areaStrategies;
 
-    public Long cheakIsExit(RegisterModel model) {
+
+    @Override
+    @OnEvent("cheakAppInfoIsExit")
+    public Long cheakAppInfoIsExit(RegisterModel model) {
+        return phoneRegisterDao.cheakAppIsExits(model);
+    }
+
+    public Long cheakUserInfoIsExit(RegisterModel model) {
         if (StringUtils.isNotEmpty(model.getImei())) {
             return phoneRegisterDao.cheakUserInfoIsExits(model);
         } else {
@@ -47,18 +54,10 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
     @OnEvent("savePhoneInfo")
     public Long savePhoneInfo(RegisterModel model) {
 
-        long id = cheakIsExit(model);
+        long id = cheakUserInfoIsExit(model);
 
         if (id == 0) {          //不存在历史数据，新增数据
             logger.debug("client;{} this client dont registered !", model.getModelIp());
-            //判断AppKey是否存在
-            long appIndex = phoneRegisterDao.cheakAppIsExits(model);
-
-            if (appIndex == 0) {
-                appIndex = phoneRegisterDao.addAppInfo(model);
-            }
-
-            model.setAppId(appIndex);
 
             //判断是否新增渠道信息
             long index = phoneRegisterDao.cheakAppChannelIsExits(model);
@@ -141,16 +140,6 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
             cache.setTimeout(appChannelActiveUserkey, 60 * 24 * 60 * 60);
             logger.debug("client:{} finished add new user phone by appNewUserKey:{} appChannelNewUserKey:{} id:{}", new Object[]{model.getModelIp(), appNewUserKey, appChannelNewUserKey, id});
 
-        } else {
-            logger.debug("this client:{} have registered by id:{}", model.getModelIp(), id);
-
-            //统计活跃用户
-            String appActiveUserkey = CacheConstants.CACHE_ACTIVE_ + model.getApp_key() + CacheConstants.CACHE_KEY_SEPARATOR + DateTimeUtils.getCurrentDay();
-            String appChannelActiveUserkey = CacheConstants.CACHE_ACTIVE_ + model.getApp_key() + CacheConstants.CACHE_KEY_SEPARATOR + model.getChannelName() + CacheConstants.CACHE_KEY_SEPARATOR + DateTimeUtils.getCurrentDay();
-
-            cache.setBit(appActiveUserkey, id, true);
-            cache.setBit(appChannelActiveUserkey, id, true);
-            logger.debug("client:{} finished add active user phone by appActiveUserkey:{} appChannelActiveUserkey:{} id:{}", new Object[]{model.getIp(), appActiveUserkey, appChannelActiveUserkey, id});
         }
 
         return id;
