@@ -4,6 +4,7 @@ import com.ads.cm.repository.cache.Cache;
 import com.ads.cm.repository.cache.CacheClosure;
 import com.ads.cm.repository.cache.DefaultHGetAndSetCacheClosure;
 import com.ads.cm.util.json.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -532,14 +533,18 @@ public class RedisCache implements Cache {
 
 
     public static void main(String[] args) {
-        RedisCache cache = new RedisCache();
-        cache.init();
+//        RedisCache cache = new RedisCache();
+//        cache.init();
+//
+//        Jedis jedis = cache.getPool().getResource();
+//
+//        String values = jedis.get("123123");
+//
+//        if (StringUtils.isNotEmpty(values)) {
+//
+//            System.out.println(values);
+//        }
 
-        Jedis jedis = cache.getPool().getResource();
 
-        String values = jedis.get("123123");
-
-
-        System.out.println(values);
     }
 }

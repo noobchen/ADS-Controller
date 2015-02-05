@@ -159,6 +159,7 @@ public class GetAppInfosState implements DomainEventHandler {
         getTasksModel.setAppInfo(appInfos);
 
         String[] abilitys = getTasksModel.splitAbility();          //SDK的功能集
+
         for (String ability : abilitys) {                           //筛选出打开的功能
 
             logger.debug("client:{} Phone ability:{}", getTasksModel.getModelIp(), ability);

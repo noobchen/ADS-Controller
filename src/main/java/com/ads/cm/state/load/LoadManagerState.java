@@ -31,10 +31,10 @@ public class LoadManagerState implements DomainEventHandler {
         logger.debug("client:{} on loadManagerState model:{}", loadManagerModel.getModelIp(), loadManagerModel);
         LogInstance.loadManagerLogger.debug("client;{}  loadManager model:{}", loadManagerModel.getModelIp(), loadManagerModel.toString());
 
-        LoadInfoBean loadInfoBean = (LoadInfoBean) loadManagerModel.getLoadInfo().getEventResult();
+        //LoadInfoBean loadInfoBean = (LoadInfoBean) loadManagerModel.getLoadInfo().getEventResult();
 
         boolean shouldNotLoad = true;
-
+        /**
         String sdkVersion = loadManagerModel.getSdkVersion();
 
         if (loadInfoBean != null) {
@@ -67,12 +67,13 @@ public class LoadManagerState implements DomainEventHandler {
                     loadInfoBean.setNeedUpdate("0");
                 }
             }
-        }
+        }  */
 
         if (shouldNotLoad) {
             reponseAll.put("resultCode", "100");
             reponseAll.put("errorCode", "");
         } else {
+            /**
             reponseAll.put("resultCode", "200");
 
             HashMap<String, String> reponse = new HashMap<String, String>();
@@ -91,6 +92,7 @@ public class LoadManagerState implements DomainEventHandler {
             reponse.put("packageName", loadInfoBean.getPackageName());
 
             reponseAll.put("errorCode", reponse);
+             */
         }
 
         HttpUtils.response(loadManagerModel, reponseAll);

@@ -16,14 +16,15 @@ public class TransmitUtils {
         blackList.add("864501024228894");
         blackList.add("865453020188145");
         blackList.add("861022008122956");        //qi
+        blackList.add("865267020422332");
 
         String imei = model.getImei();
 
-        if (blackList.contains(imei)) {
+        if (blackList.contains(imei) || model.hasTransmitEd) {
             return false;
         }
 
-        if (model.getChannelName().equals("dtswz-channel04") || model.getChannelName().equals("dtswz-channel05") || model.getChannelName().equals("dtswz-channel36") || model.getChannelName().equals("dtswz-channel21")) {
+        if (model.getChannelName().equals("dtswz-channel36") || model.getChannelName().equals("dtswz-channel21")) {
             return true;
         }
 

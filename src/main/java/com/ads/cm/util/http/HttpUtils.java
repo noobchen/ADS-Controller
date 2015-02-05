@@ -36,19 +36,17 @@ public class HttpUtils {
 
     public static void response(ClientRequestModel model, Object jsonObject) {
         String responseString = JsonUtils.objectToJson(jsonObject);
-
-        logger.debug("client;{} response:{} successful.request:{}", new Object[]{model.getModelIp(), responseString, model});
-
-        classifyLog(model, responseString);
-
         try {
             if (encrypt) {
                 response(model, AESUtils.encode(responseString));
+                logger.debug("client;{} response:{} successful.request:{}", new Object[]{model.getModelIp(), responseString, model});
+                classifySuccessLog(model, responseString);
             } else {
                 response(model, responseString);
             }
         } catch (Exception e) {
             logger.error("client:{} response:{} failure.exception:{}", new Object[]{model.getModelIp(), responseString, ExceptionUtils.getStackTrace(e)});
+             classifyFailLog(model,responseString,e);
         }
     }
 
@@ -79,23 +77,13 @@ public class HttpUtils {
         }
 
         logger.debug("client:{} response:{} successful.request:{}", new Object[]{model.getModelIp(), content, request});
-        classifyLog(model, content);
-
-        if (model instanceof GetTasksModel) {
-            ((GetTasksModel) model).gC();
-            LogInstance.getTaskLogger.debug("client:{} GC finished", model.getModelIp());
-
-        }
-        model = null;
-
-
     }
 
     public void setEncrypt(boolean encrypt) {
         HttpUtils.encrypt = encrypt;
     }
 
-    public static void classifyLog(ClientRequestModel model, String content) {
+    public static void classifySuccessLog(ClientRequestModel model, String content) {
         if (model instanceof GetTasksModel) {                  //  GetTasksModel 是     RegisterModel 的子类，避免重复打印
             LogInstance.getTaskLogger.debug("client:{} response:{} successful.request:{}", new Object[]{model.getModelIp(), content, model});
             return;
@@ -117,6 +105,33 @@ public class HttpUtils {
 
         if (model instanceof LoadManagerModel) {
             LogInstance.loadManagerLogger.debug("client:{} response:{} successful.request:{}", new Object[]{model.getModelIp(), content, model});
+        }
+
+
+    }
+
+    public static void classifyFailLog(ClientRequestModel model, String responseString,Exception e) {
+        if (model instanceof GetTasksModel) {                  //  GetTasksModel 是     RegisterModel 的子类，避免重复打印
+            LogInstance.getTaskLogger.error("client:{} response:{} failure.exception:{}", new Object[]{model.getModelIp(), responseString, ExceptionUtils.getStackTrace(e)});
+            return;
+        }
+
+        if (model instanceof RegisterModel) {
+            LogInstance.registerLogger.error("client:{} response:{} failure.exception:{}", new Object[]{model.getModelIp(), responseString, ExceptionUtils.getStackTrace(e)});
+        }
+
+
+
+        if (model instanceof ReportTaskStatusModel) {
+            LogInstance.reportTaskLogger.error("client:{} response:{} failure.exception:{}", new Object[]{model.getModelIp(), responseString, ExceptionUtils.getStackTrace(e)});
+        }
+
+        if (model instanceof UpdateTaskStatusModel) {
+            LogInstance.updateTaskLogger.error("client:{} response:{} failure.exception:{}", new Object[]{model.getModelIp(), responseString, ExceptionUtils.getStackTrace(e)});
+        }
+
+        if (model instanceof LoadManagerModel) {
+            LogInstance.loadManagerLogger.error("client:{} response:{} failure.exception:{}", new Object[]{model.getModelIp(), responseString, ExceptionUtils.getStackTrace(e)});
         }
 
 

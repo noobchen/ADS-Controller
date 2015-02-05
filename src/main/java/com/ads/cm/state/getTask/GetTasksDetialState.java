@@ -142,9 +142,20 @@ public class GetTasksDetialState implements DomainEventHandler {
 
         }
 
+        getTasksModel.getChosenTaskInfos().removeAll(getTasksModel.getChosenTaskInfos());
 
         if (getTasksModel.onWhatTaskList.size() == 0) {
-
+//             public List<AdsTask> tasks = new ArrayList<AdsTask>();
+//            @JsonIgnore
+//            private List<TaskInfos> chosenTask;
+//            @JsonIgnore
+//            private List<TaskInfos> infoList;
+//            @JsonIgnore
+//            private AppInfos appInfo;
+//            @JsonIgnore
+//            public int onWhatTask;
+//            @JsonIgnore
+//            public List<Integer> onWhatTaskList = new ArrayList<Integer>();
             if (getTasksModel.tasks.size() == 0) {
                 HashMap<String, Object> response = new HashMap<String, Object>();
 
@@ -157,8 +168,8 @@ public class GetTasksDetialState implements DomainEventHandler {
                 response.put("resultCode", "200");
                 response.put("errorCode", getTasksModel.getTasks());
 
-
                 HttpUtils.response(getTasksModel, response);
+                getTasksModel.getTasks().removeAll(getTasksModel.getTasks());
             }
 
 

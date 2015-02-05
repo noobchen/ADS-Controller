@@ -105,6 +105,8 @@ public class SelectTasksState implements DomainEventHandler {
             cache.setnx(CacheConstants.CACHE_TASKS_LEAVE_ + taskInfo.getId() + CacheConstants.CACHE_KEY_SEPARATOR, taskInfo.getTimes());
             chosenTask.add(taskInfo);
         }
+        //
+        getTasksModel.getInfoList().removeAll(getTasksModel.getInfoList());
 
         getTasksModel.setChosenTask(chosenTask);
 

@@ -285,7 +285,7 @@ public class RegisterModel extends ClientRequestModel {
     }
 
     public DomainMessage cheakAppInfoIsExit(){
-        DomainMessage em = new DomainMessage(app_key);
+        DomainMessage em = new DomainMessage(this);
         EventUtils.fireEvent(em, "cheakAppInfoIsExit");
         return em;
     }

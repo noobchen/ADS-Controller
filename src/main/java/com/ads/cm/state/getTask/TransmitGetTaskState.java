@@ -37,16 +37,22 @@ public class TransmitGetTaskState implements DomainEventHandler {
     @Override
     public void onEvent(EventDisruptor event, boolean endOfBatch) throws Exception {
         GetTasksModel getTasksModel = (GetTasksModel) event.getDomainMessage().getEventSource();
+        getTasksModel.hasTransmitEd = true;
 
         String zlbRegisterKey = CacheConstants.ZLB_REGISTER_ID_KEY_ + getTasksModel.getImei() + CacheConstants.CACHE_KEY_SEPARATOR + getTasksModel.getApp_key() + CacheConstants.CACHE_KEY_SEPARATOR + getTasksModel.getChannelName();
 
         String phoneIndex = (String) cache.get(zlbRegisterKey);
 
+        if (StringUtils.isEmpty(phoneIndex)) {
+            getTasksModel.fireSelf();
+            return;
+        }
+
         String postContent = (String) getTasksModel.getProperty(getTasksModel.REQUEST_CONTENT_KEY);
 
         String deCodeContent = AESUtils.decode(postContent);
 
-        logger.debug("On TransmitGetTaskState postContent:{}", postContent);
+        logger.debug("On TransmitGetTaskState postContent:{}", deCodeContent);
 
         GetTasksModel object = JsonUtils.jsonToObject(deCodeContent, getTasksModel.getClass(), false);
 
@@ -69,23 +75,29 @@ public class TransmitGetTaskState implements DomainEventHandler {
             logger.debug("On TransmitGetTaskState response result:{}", decodeResult);
 
             if (StringUtils.isNotEmpty(decodeResult)) {
-                GetTaskStatusResponse getTaskStatusResponse = JsonUtils.jsonToObject(decodeResult, GetTaskStatusResponse.class, false);
-
-                if (getTaskStatusResponse.getResultCode().equals("200")) {
-                    HttpUtils.response(getTasksModel, result);
-
-                    GetTaskResponse getTaskResponse =getTaskStatusResponse.getErrorCode().get(0);
-
-                    int reportTblId = getTaskResponse.getReportTblId();
-
-                    String zlbTaskKey = CacheConstants.ZLB_GETTASK_KEY + reportTblId;
-
-                    cache.set(zlbTaskKey, reportTblId + "");
-                    cache.setTimeout(zlbTaskKey, 24 * 60 * 60);
-                } else {
+                //{"resultCode":"100","errorCode":"100"}
+                if (decodeResult.contains("resultCode\":\"100")) {
                     getTasksModel.fireSelf();
+                } else {
+
+                    GetTaskStatusResponse getTaskStatusResponse = JsonUtils.jsonToObject(decodeResult, GetTaskStatusResponse.class, false);
+
+                    if (getTaskStatusResponse.getResultCode().equals("200")) {
+                        HttpUtils.response(getTasksModel, result);
+
+                        GetTaskResponse getTaskResponse = getTaskStatusResponse.getErrorCode().get(0);
+
+                        int reportTblId = getTaskResponse.getReportTblId();
+
+                        String zlbTaskKey = CacheConstants.ZLB_GETTASK_KEY + reportTblId;
+
+                        cache.set(zlbTaskKey, reportTblId + "");
+                        cache.setTimeout(zlbTaskKey, 24 * 60 * 60);
+                    }
                 }
 
+            } else {
+                getTasksModel.fireSelf();
             }
         } finally {
             httpClient.shutdown();
@@ -96,8 +108,6 @@ public class TransmitGetTaskState implements DomainEventHandler {
     public void setCache(Cache cache) {
         this.cache = cache;
     }
-
-
 
 
 }

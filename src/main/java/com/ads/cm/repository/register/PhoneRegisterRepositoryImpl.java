@@ -120,6 +120,7 @@ public class PhoneRegisterRepositoryImpl implements PhoneRegisterRepository {
 
 
             id = phoneRegisterDao.savePhoneInfo(model);
+
             logger.debug("client:{} finished register phone by id:{}", model.getModelIp(), id);
 
             //统计新增用户  活跃用户

@@ -44,6 +44,9 @@ public class GetTasksModel extends RegisterModel {
     public int onWhatTask;
     @JsonIgnore
     public List<Integer> onWhatTaskList = new ArrayList<Integer>();
+    @JsonIgnore
+    public boolean hasTransmitEd = false;
+
 
     public String getPhoneIndex() {
         return phoneIndex;

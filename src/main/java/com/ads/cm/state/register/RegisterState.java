@@ -55,8 +55,8 @@ public class RegisterState implements DomainEventHandler {
             response.put("errorCode", "100");//无效的AppKey
 
             HttpUtils.response(registerModel, response);
-            logger.debug("client;{} appkey:{} length >30 ", registerModel.getModelIp(), registerModel.app_key);
-            LogInstance.registerLogger.debug("client;{} appkey:{} length >30 ", registerModel.getModelIp(), registerModel.app_key);
+            logger.debug("client;{} appkey:{} donnot exits ", registerModel.getModelIp(), registerModel.app_key);
+            LogInstance.registerLogger.debug("client;{} appkey:{} donnot exits", registerModel.getModelIp(), registerModel.app_key);
             return;
         }
 
